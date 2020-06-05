@@ -1,0 +1,31 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+        "title":"Protection Poker",
+        "version":"1.0"
+    },
+    "servers": [
+        {"url":"https://api.server.test/v1"}
+    ],
+    "paths": {
+    },
+    "components": {
+        "schemas": {
+            "RatingElement": {
+                "type": "object",
+                "required": [
+                    "id"
+                  ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "integer",
+                    "nullable": true
+                  }
+                }
+              }
+        }
+    }
+}
