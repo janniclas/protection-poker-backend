@@ -21,8 +21,7 @@
                     "type": "string"
                   },
                   "rating": {
-                    "type": "integer",
-                    "nullable": true
+                    "type": "integer"
                   }
                 }
               }
