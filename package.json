@@ -13,7 +13,6 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "generateOpenApi": "./installOpenApi.sh && ./bin/openapitools/openapi-generator-cli generate -i openapi.json -g typescript-rxjs -Dmodels -o src",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
