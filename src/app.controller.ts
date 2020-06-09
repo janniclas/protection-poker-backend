@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AppService } from './app.service';
-import { RegisterForGameDto } from './models/RegisterForGame';
+import { Game, Player } from './models/RegisterForGame';
 
 @Controller()
 export class AppController {
@@ -12,7 +12,21 @@ export class AppController {
   }
 
   @Post('/register')
-  register(@Body() registerForGame: RegisterForGameDto): string {
+  register(@Body() registerForGame: Game): string {
     return 'registered';
+  }
+
+  @Get()
+  getGames(): Game[] {
+
+    return [];
+  }
+
+  @Post('/create')
+  createGame(@Body() player: Player): Game {
+    const game = new Game();
+    game.id = '' + Math.random();
+    game.player = [player];
+    return game;
   }
 }

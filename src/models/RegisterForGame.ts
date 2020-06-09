@@ -1,6 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class RegisterForGameDto {
+export class Game {
     @ApiProperty()
-    name: string;
+    id: string;
+
+    @ApiPropertyOptional()
+    player: Player[];
 }
+
+export class Player {}
