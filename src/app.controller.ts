@@ -1,32 +1,21 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
-import { AppService } from './app.service';
-import { Game, Player } from './models/RegisterForGame';
+import { Controller, Post } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
+import { Asset } from './models/RatingElement';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() { }
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+
+
+  @Post('/add')
+  addAsset(): Asset {
+
+    const asset = new Asset();
+    asset.id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+    
+
+    return asset;
   }
 
-  @Post('/register')
-  register(@Body() registerForGame: Game): string {
-    return 'registered';
-  }
-
-  @Get()
-  getGames(): Game[] {
-
-    return [];
-  }
-
-  @Post('/create')
-  createGame(@Body() player: Player): Game {
-    const game = new Game();
-    game.id = '' + Math.random();
-    game.player = [player];
-    return game;
-  }
 }

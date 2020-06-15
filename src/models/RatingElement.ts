@@ -1,4 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+
 
 export class RatingElementDto {
 
@@ -10,4 +11,16 @@ export class RatingElementDto {
 
     @ApiPropertyOptional()
     rating: number;
+}
+
+export class Asset extends PickType(RatingElementDto, ['id', 'name'] as const) {}
+
+export class NewAsset extends PickType(RatingElementDto, ['name'] as const) {}
+
+export class AddAsset {
+    @ApiProperty()
+    gameId: string;
+
+    @ApiProperty()
+    asset: NewAsset;
 }
