@@ -11,4 +11,8 @@ export class AssetService {
         asset.gameId = addAsset.gameId;
         return asset;
     }
+
+    addRating(asset: Asset) {
+        
+    }
 }

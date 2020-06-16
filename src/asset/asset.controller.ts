@@ -3,7 +3,7 @@ import { Asset, AddAsset } from './model/Asset';
 import { ApiCreatedResponse } from '@nestjs/swagger';
 import { AssetService } from './asset.service';
 import { DbConnectorService } from 'src/db-connector/db-connector.service';
-import { GameGateway } from 'src/GameGateway';
+import { GameGateway } from 'src/socket/GameGateway';
 
 @Controller('asset')
 export class AssetController {
@@ -34,9 +34,14 @@ export class AssetController {
     }
 
 
-    @Post('/proposeRating')
-    proposeRating(@Body() proposedAssetRating: Asset) {
+    @Post('/proposal')
+    proposeRating(@Body() proposal: Asset) {
+        const game = this.dbConnectorService.getGame(proposal.gameId);
         
+        // rating round
+        // array of assets (proposals)
+        // corresponding game id
+        // 
     }
 
 }

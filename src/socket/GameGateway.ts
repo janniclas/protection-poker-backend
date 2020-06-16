@@ -1,7 +1,7 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, ConnectedSocket, OnGatewayInit, OnGatewayConnection } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
-import { Asset } from './asset/model/Asset';
+import { Asset } from '../asset/model/Asset';
 
 
 @WebSocketGateway()

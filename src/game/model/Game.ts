@@ -15,7 +15,8 @@ export class Game {
     player: Player[];
 
     @ApiProperty()
-    assets: Asset[];
+    assets: Map<string, Asset>;
+
 }
 
 export class GameOverview extends PickType(Game, ['id', 'name'] as const) {}

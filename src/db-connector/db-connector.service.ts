@@ -6,16 +6,16 @@ import { Asset } from 'src/asset/model/Asset';
 @Injectable()
 export class DbConnectorService {
     saveAsset(asset: Asset) {
-        const game = State.games[asset.gameId];
+        const game = State.games.get(asset.gameId);
         if (game) {
-            game.assets.push(asset);
+            game.assets.set(asset.id, asset);
             return true;
         }
         return false;
     }
 
     allGames(): GameOverview[] {
-        return Object.values(State.games).map(game => {
+        return Array.from(State.games.values()).map(game => {
             const overview = new GameOverview();
             overview.name = game.name; overview.id = game.id;
             return overview;
@@ -23,14 +23,14 @@ export class DbConnectorService {
     }
 
     saveGame(game: Game): boolean {
-        State.games[game.id] = game;
+        State.games.set(game.id, game);
         return true;
     }
 
     getGame(gameId: string): Game {
-        return State.games[gameId];
+        return State.games.get(gameId);
     }
 }
 
 
-const State: { games: { [id: string]: Game } } = { games: {} };
+const State: { games: Map<string, Game> } = { games: new Map<string, Game>() };

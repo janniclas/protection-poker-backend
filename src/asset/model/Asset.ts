@@ -14,6 +14,9 @@ export class Asset {
 
     @ApiPropertyOptional()
     rating: number;
+
+    @ApiPropertyOptional()
+    proposedRatings: {[playerId: string]: number}
 }
 
 export class NewAsset extends PickType(Asset, ['name'] as const) {}
