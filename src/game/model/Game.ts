@@ -1,8 +1,10 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { Asset } from 'src/models/RatingElement';
+import { Asset } from 'src/asset/model/Asset';
+
 
 
 export class Game {
+    
     @ApiProperty()
     id: string;
 

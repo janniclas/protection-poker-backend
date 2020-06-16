@@ -1,9 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { Game, GameOverview } from 'src/game/model/Game';
+import { Asset } from 'src/asset/model/Asset';
 
 
 @Injectable()
 export class DbConnectorService {
+    saveAsset(asset: Asset) {
+        const game = State.games[asset.gameId];
+        if (game) {
+            game.assets.push(asset);
+            return true;
+        }
+        return false;
+    }
 
     allGames(): GameOverview[] {
         return Object.values(State.games).map(game => {

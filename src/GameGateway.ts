@@ -1,17 +1,17 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, ConnectedSocket, OnGatewayInit, OnGatewayConnection } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
-import { AddAsset, Asset } from './models/RatingElement';
 import { Logger } from '@nestjs/common';
+import { Asset } from './asset/model/Asset';
 
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayInit, OnGatewayConnection {
 
     handleConnection(client: Socket, ...args: any[]) {
-        console.log("connection received");
+        Logger.log("connection received");
     }
     afterInit(server: Server) {
-        console.log("gateway initialized");
+        Logger.log("gateway initialized");
     }
 
     private gameClient: { [id: string]: Socket[] } = {};
@@ -29,12 +29,10 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection {
         this.gameClient[gameId].push(client);
     }
 
-    public handleaddAsset(addAsset: AddAsset) {
-        
-        this.getClientsForGame(addAsset.gameId).forEach((socket) => {
-            socket.emit('addAsset', Asset);
+    public publishAsset(asset: Asset) {
+        this.getClientsForGame(asset.gameId).forEach((socket) => {
+            socket.emit('addAsset', asset);
         });
-        return addAsset.asset;
     }
 
     private getClientsForGame(gameId: string): Socket[] {

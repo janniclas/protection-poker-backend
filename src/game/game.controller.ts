@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger } from '@nestjs/common';
 import { Game, GameOverview, CreateGame } from './model/Game';
 import { GameService } from './game.service';
 import { DbConnectorService } from 'src/db-connector/db-connector.service';
@@ -27,8 +27,9 @@ export class GameController {
   })
   createGame(@Body() createGame: CreateGame): Promise<Game> {
 
+    //TODO: make sure name param is set !
     return new Promise<Game>((resolve, reject) => {
-
+      Logger.log('received create game ' + createGame);
       const game = this.gameService.createGame(createGame);
       const gameSaved = this.dbConnectorService.saveGame(game);
       
