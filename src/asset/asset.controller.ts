@@ -27,6 +27,7 @@ export class AssetController {
 
         const game = this.dbConnectorService.getGame(proposal.gameId);
         const updatedAsset = this.assetService.updateAsset(game, proposal);
+        // check if all player proposed a rating for the current asset
         return this.assetService.saveAndPublishAsset(updatedAsset);
 
     }
