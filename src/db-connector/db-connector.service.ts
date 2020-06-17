@@ -34,7 +34,7 @@ export class DbConnectorService {
 }
 
 
-const State: { games: MyMap<Game> } = { games: {}};
+const State: { games: MyMap<Game> } = { games: {} };
 const emptyGame = new Game();
 emptyGame.assets = {};
 emptyGame.id = '-1';
