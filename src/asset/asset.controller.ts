@@ -1,5 +1,5 @@
 import { Controller, Body, Post } from '@nestjs/common';
-import { Asset, AddAsset } from './model/Asset';
+import { Asset, AddAsset, ProposeRating } from './model/Asset';
 import { ApiCreatedResponse } from '@nestjs/swagger';
 import { AssetService } from './asset.service';
 import { DbConnectorService } from 'src/db-connector/db-connector.service';
@@ -16,8 +16,7 @@ export class AssetController {
         description: 'The record has been successfully created.',
         type: Asset,
     })
-    createGame(@Body() addAsset: AddAsset): Promise<Asset> {
-
+    createAsset(@Body() addAsset: AddAsset): Promise<Asset> {
         //TODO: make sure name param is set !
         return new Promise<Asset>((resolve, reject) => {
             const asset = this.assetService.createAsset(addAsset);
@@ -35,13 +34,12 @@ export class AssetController {
 
 
     @Post('/proposal')
-    proposeRating(@Body() proposal: Asset) {
+    proposeRating(@Body() proposal: ProposeRating): Asset {
         const game = this.dbConnectorService.getGame(proposal.gameId);
-        
-        // rating round
-        // array of assets (proposals)
-        // corresponding game id
-        // 
+        const assetToUpdate = game.assets[proposal.id];
+        assetToUpdate.proposedRatings[proposal.id].push(proposal.rating);
+
+        return assetToUpdate;
     }
 
 }

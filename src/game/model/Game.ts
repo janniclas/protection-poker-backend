@@ -1,5 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Asset } from 'src/asset/model/Asset';
+import { MyMap } from 'src/models/RatingElement';
 
 
 
@@ -15,7 +16,7 @@ export class Game {
     player: Player[];
 
     @ApiProperty()
-    assets: Map<string, Asset>;
+    assets: MyMap<Asset>;
 
 }
 

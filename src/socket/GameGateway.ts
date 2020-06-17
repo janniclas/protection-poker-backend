@@ -36,7 +36,8 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection {
     }
 
     private getClientsForGame(gameId: string): Socket[] {
-        return this.gameClient[gameId];
+        const clients = this.gameClient[gameId];
+        return clients ? clients : [];
     }
 
 }

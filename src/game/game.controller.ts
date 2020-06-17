@@ -16,7 +16,7 @@ export class GameController {
   }
 
   @Get(':id')
-  getGame(@Param('id') id: string): Game {
+  getGame(@Param('id') id: string): any {
     return this.dbConnectorService.getGame(id);
   }
 

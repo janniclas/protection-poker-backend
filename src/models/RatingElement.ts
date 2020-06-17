@@ -24,3 +24,7 @@
 //     @ApiProperty()
 //     asset: NewAsset;
 // }
+
+export type MyMap<T> = {
+    [id: string]: T
+}

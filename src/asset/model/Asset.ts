@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { MyMap } from 'src/models/RatingElement';
 
 
 export class Asset {
@@ -16,11 +17,22 @@ export class Asset {
     rating: number;
 
     @ApiPropertyOptional()
-    proposedRatings: {[playerId: string]: number}
+    proposedRatings: MyMap<Array<number>>
 }
 
 export class NewAsset extends PickType(Asset, ['name'] as const) {}
 
+export class ProposeRating {
+    
+    @ApiProperty()
+    id: string;
+
+    @ApiProperty()
+    gameId: string;
+    
+    @ApiProperty()
+    rating: number;
+}
 export class AddAsset {
     @ApiProperty()
     gameId: string;
