@@ -1,8 +1,13 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
+
+import { ApiProperty, PickType, ApiPropertyOptional } from '@nestjs/swagger';
 import { Asset } from 'src/asset/model/Asset';
 import { MyMap } from 'src/models/RatingElement';
 
 
+export class GameManager {
+    game: Game;
+    gameState: GameState;
+}
 
 export class Game {
     
@@ -13,10 +18,26 @@ export class Game {
     name: string;
 
     @ApiProperty()
-    player: Player[];
+    assets: MyMap<Asset>;
+}
+
+export class GameState {
 
     @ApiProperty()
-    assets: MyMap<Asset>;
+    type: GameType
+
+    @ApiProperty()
+    player: Player[];
+
+    @ApiPropertyOptional()
+    currentElementId: string
+}
+
+enum GameType {
+    ADD_ASSET,
+    RATE_ASSET,
+    OVERVIEW_ASSET,
+    ADD_FEATURES
 }
 
 export class GameOverview extends PickType(Game, ['id', 'name'] as const) {}

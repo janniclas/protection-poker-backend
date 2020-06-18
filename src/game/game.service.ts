@@ -9,7 +9,6 @@ export class GameService {
         const game = new Game();
         game.id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
         game.assets = {};
-        game.player = [];
         game.name = createGame.name;
         return game;
     }

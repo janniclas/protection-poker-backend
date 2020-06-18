@@ -39,5 +39,4 @@ const emptyGame = new Game();
 emptyGame.assets = {};
 emptyGame.id = '-1';
 emptyGame.name = 'Empty Game for test Purposes';
-emptyGame.player = [];
 State.games['-1'] = emptyGame;
