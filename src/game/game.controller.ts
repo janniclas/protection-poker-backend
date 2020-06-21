@@ -9,7 +9,7 @@ export class GameController {
 
   constructor(private gameService: GameService, private dbConnectorService: DbConnectorService) { }
 
-  @Get('/all')
+  @Get()
   getGameIds(): GameOverview[] {
 
     return this.dbConnectorService.allGames();
@@ -20,7 +20,7 @@ export class GameController {
     return this.dbConnectorService.getGame(id);
   }
 
-  @Post('/create')
+  @Post()
   @ApiCreatedResponse({
     description: 'The record has been successfully created.',
     type: Game,
