@@ -23,16 +23,13 @@ export class Asset {
 export class NewAsset extends PickType(Asset, ['name'] as const) {}
 
 export class ProposeRating {
-    
-    @ApiProperty()
-    id: string;
-
     @ApiProperty()
     gameId: string;
     
     @ApiProperty()
     rating: number;
 }
+
 export class AddAsset {
     @ApiProperty()
     gameId: string;

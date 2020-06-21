@@ -1,4 +1,4 @@
-import { Controller, Body, Post } from '@nestjs/common';
+import { Controller, Body, Post, Param, Patch } from '@nestjs/common';
 import { Asset, AddAsset, ProposeRating } from './model/Asset';
 import { ApiCreatedResponse } from '@nestjs/swagger';
 import { AssetService } from './asset.service';
@@ -9,7 +9,7 @@ export class AssetController {
 
     constructor(private assetService: AssetService, private dbConnectorService: DbConnectorService) { }
 
-    @Post('/create')
+    @Post()
     @ApiCreatedResponse({
         description: 'The record has been successfully created.',
         type: Asset,
@@ -22,11 +22,11 @@ export class AssetController {
     }
 
 
-    @Post('/proposal')
-    proposeRating(@Body() proposal: ProposeRating): Promise<Asset> {
+    @Patch(':id')
+    proposeRating(@Param('id') id: string, @Body() proposal: ProposeRating): Promise<Asset> {
 
         const game = this.dbConnectorService.getGame(proposal.gameId);
-        const updatedAsset = this.assetService.updateAsset(game, proposal);
+        const updatedAsset = this.assetService.updateAsset(game, id, proposal.rating);
         // check if all player proposed a rating for the current asset
         return this.assetService.saveAndPublishAsset(updatedAsset);
 
