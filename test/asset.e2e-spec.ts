@@ -12,11 +12,6 @@ import { GameGateway } from '../src/socket/GameGateway';
 describe('asset', () => {
     let app: INestApplication;
 
-
-    const newAsset = new NewAsset();
-    newAsset.gameId = '-1';
-    newAsset.name = 'test asset'
-
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [SocketModule, DbConnectorModule, AssetModule],
@@ -26,7 +21,10 @@ describe('asset', () => {
         app = moduleRef.createNestApplication();
         await app.init();
     });
+
     let assetId = 'noId';
+    const newAsset = getDummyNewAsset();
+
     it(`/POST Asset`, () => {
         return request(app.getHttpServer())
             .post('/asset').send(newAsset).expect(function (res) {
@@ -34,20 +32,33 @@ describe('asset', () => {
                     assetId = res.body.id;
                     res.body.id = '123';
                 }
-            }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {}});
+            }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} });
     });
 
-    const rating = new ProposeRating();
-    rating.gameId = '-1';
-    rating.rating = 5;
-    rating.playerId = '42';
 
-    it(`/PATCH Asset`, () => {
-        return request(app.getHttpServer())
-            .patch('/asset/'+assetId).send(rating).expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {"42":[5]}})
-    });
-
+    if (assetId != 'noId') {
+        const rating = getDummyProposal();
+        it(`/PATCH Asset`, () => {
+            return request(app.getHttpServer())
+                .patch('/asset/' + assetId).send(rating).expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { "42": [5] } })
+        });
+    }
     afterAll(async () => {
         await app.close();
     });
 });
+
+const getDummyProposal = () => {
+    const proposal = new ProposeRating();
+    proposal.gameId = '-1';
+    proposal.rating = 5;
+    proposal.playerId = '42';
+    return proposal;
+}
+
+const getDummyNewAsset = () => {
+    const newAsset = new NewAsset();
+    newAsset.gameId = '-1';
+    newAsset.name = 'test asset'
+    return newAsset;
+}
