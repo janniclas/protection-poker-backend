@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Logger } from '@nestjs/common';
 import { Game, GameOverview, CreateGame } from './model/Game';
 import { GameService } from './game.service';
-import { DbConnectorService } from 'src/db-connector/db-connector.service';
+import { DbConnectorService } from '../db-connector/db-connector.service';
 import { ApiCreatedResponse } from '@nestjs/swagger';
 
 @Controller('game')

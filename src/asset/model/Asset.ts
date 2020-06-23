@@ -20,20 +20,15 @@ export class Asset {
     proposedRatings: MyMap<Array<number>>
 }
 
-export class NewAsset extends PickType(Asset, ['name'] as const) {}
+export class NewAsset extends PickType(Asset, ['name', 'gameId'] as const) {}
 
 export class ProposeRating {
     @ApiProperty()
     gameId: string;
+
+    @ApiProperty()
+    playerId: string;
     
     @ApiProperty()
     rating: number;
-}
-
-export class AddAsset {
-    @ApiProperty()
-    gameId: string;
-
-    @ApiProperty()
-    asset: NewAsset;
 }

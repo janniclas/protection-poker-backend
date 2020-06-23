@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { Game, GameOverview } from 'src/game/model/Game';
-import { Asset } from 'src/asset/model/Asset';
-import { MyMap } from 'src/models/RatingElement';
+import { Injectable, Logger } from '@nestjs/common';
+import { Game, GameOverview } from '../game/model/Game';
+import { Asset } from '../asset/model/Asset';
+import { MyMap } from '../models/RatingElement';
 
 
 @Injectable()
 export class DbConnectorService {
+
     saveAsset(asset: Asset) {
+
+        Logger.debug('Trying to save asset ' + JSON.stringify(asset));
+
         const game = State.games[asset.gameId];
         if (game) {
             game.assets[asset.id] = asset;

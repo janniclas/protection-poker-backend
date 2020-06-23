@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GameService } from './game.service';
 import { GameController } from './game.controller';
-import { DbConnectorModule } from 'src/db-connector/db-connector.module';
+import { DbConnectorModule } from '../db-connector/db-connector.module';
 
 @Module({
   controllers: [GameController],

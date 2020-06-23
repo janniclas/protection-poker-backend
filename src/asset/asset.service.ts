@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { AddAsset, Asset } from './model/Asset';
+import { Injectable, Logger } from '@nestjs/common';
+import { Asset, NewAsset } from './model/Asset';
 import { v4 as uuidv4 } from 'uuid';
-import { Game } from 'src/game/model/Game';
-import { DbConnectorService } from 'src/db-connector/db-connector.service';
-import { GameGateway } from 'src/socket/GameGateway';
+import { DbConnectorService } from '../db-connector/db-connector.service';
+import { GameGateway } from '../socket/GameGateway';
 
 @Injectable()
 export class AssetService {
@@ -11,16 +10,27 @@ export class AssetService {
     constructor(private dbConnectorService: DbConnectorService,
         private gameGateway: GameGateway) { }
 
-    updateAsset(game: Game, id: string, rating: number) {
-        const asset = game.assets[id];
-        asset.proposedRatings[id].push(rating);
+    updateAsset(gameId: string, assetId: string, playerId: string, rating: number) {
+
+        Logger.debug('Trying to update asset');
+
+
+        const game = this.dbConnectorService.getGame(gameId);
+        Logger.debug('Corresponding game ' + JSON.stringify(game));
+        const asset = game.assets[assetId];
+        if (!asset.proposedRatings[playerId]) {
+            asset.proposedRatings[playerId] = [];
+        }
+        asset.proposedRatings[playerId].push(rating);
         return asset;
     }
-    createAsset(addAsset: AddAsset) {
+
+    createAsset(newAsset: NewAsset) {
         const asset = new Asset();
         asset.id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
-        asset.name = addAsset.asset.name;
-        asset.gameId = addAsset.gameId;
+        asset.name = newAsset.name;
+        asset.gameId = newAsset.gameId;
+        asset.proposedRatings = {};
         return asset;
     }
 
