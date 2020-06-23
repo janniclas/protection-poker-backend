@@ -9,6 +9,21 @@ import { NewAsset, ProposeRating } from '../src/asset/model/Asset';
 import { SocketModule } from '../src/socket/socket.module';
 import { GameGateway } from '../src/socket/GameGateway';
 
+const getDummyProposal = () => {
+    const proposal = new ProposeRating();
+    proposal.gameId = '-1';
+    proposal.rating = 5;
+    proposal.playerId = '42';
+    return proposal;
+}
+
+const getDummyNewAsset = () => {
+    const newAsset = new NewAsset();
+    newAsset.gameId = '-1';
+    newAsset.name = 'test asset'
+    return newAsset;
+}
+
 describe('asset', () => {
     let app: INestApplication;
 
@@ -43,22 +58,9 @@ describe('asset', () => {
                 .patch('/asset/' + assetId).send(rating).expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { "42": [5] } })
         });
     }
+
+
     afterAll(async () => {
         await app.close();
     });
 });
-
-const getDummyProposal = () => {
-    const proposal = new ProposeRating();
-    proposal.gameId = '-1';
-    proposal.rating = 5;
-    proposal.playerId = '42';
-    return proposal;
-}
-
-const getDummyNewAsset = () => {
-    const newAsset = new NewAsset();
-    newAsset.gameId = '-1';
-    newAsset.name = 'test asset'
-    return newAsset;
-}
