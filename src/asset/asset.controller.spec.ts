@@ -4,7 +4,8 @@ import { AssetService } from './asset.service';
 
 describe('Asset Controller', () => {
   let controller: AssetController;
-  let assetService = { createAsset: () => {}, updateAsset: () => {}};
+  let assetService = { createAsset: () => { }, updateAsset: () => { } };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AssetController],
