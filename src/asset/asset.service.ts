@@ -25,23 +25,14 @@ export class AssetService {
     }
 
     createAsset(newAsset: CreateAsset) {
-        const asset = new Asset(uuidv4(), newAsset.gameId, newAsset.name, {});
-        asset.id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
-        asset.name = newAsset.name;
-        asset.gameId = newAsset.gameId;
-        asset.proposedRatings = {};
-        return asset;
+        return new Asset(uuidv4(), newAsset.gameId, newAsset.name, {});
     }
 
-    saveAndPublishAsset(asset: Asset) {
-        return new Promise<Asset>((resolve, reject) => {
-            const assetSaved = this.dbConnectorService.saveAsset(asset);
-            if (assetSaved) {
-                this.gameGateway.publishAsset(asset);
-                resolve(asset);
-            } else {
-                reject('Asset was not updated successfully');
-            }
-        });
+    async saveAndPublishAsset(asset: Asset) {
+
+        const savedAsset = await this.dbConnectorService.saveAsset(asset);
+        this.gameGateway.publishAsset(savedAsset);
+        return savedAsset;
+
     }
 }
