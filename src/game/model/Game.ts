@@ -42,7 +42,7 @@ enum GameType {
 
 export class GameOverview extends PickType(Game, ['id', 'name'] as const) {}
 
-export class CreateGame extends PickType(Game, [ 'name'] as const) {}
+export class CreateGame extends PickType(Game, ['name'] as const) {}
 
 
 export class Player {}

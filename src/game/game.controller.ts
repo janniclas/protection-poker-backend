@@ -15,6 +15,8 @@ export class GameController {
 
   @Get(':id')
   getGame(@Param('id') id: string): Game {
+
+    Logger.log('received get game with id ' + id);
     return this.gameService.getGame(id);
   }
 
@@ -26,8 +28,10 @@ export class GameController {
   createGame(@Body() createGame: CreateGame): Promise<Game> {
 
     //TODO: make sure name param is set !
+    // therefore, figure out how to combine 
+    // validator pipes with swagger 
 
-    Logger.log('received create game ' + createGame);
+    Logger.log('received create game ' + JSON.stringify(createGame));
     const game = this.gameService.createGame(createGame);
     return this.gameService.saveGame(game);
   }

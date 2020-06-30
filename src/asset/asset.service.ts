@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Asset, NewAsset } from './model/Asset';
+import { Asset, CreateAsset } from './model/Asset';
 import { v4 as uuidv4 } from 'uuid';
 import { DbConnectorService } from '../db-connector/db-connector.service';
 import { GameGateway } from '../socket/GameGateway';
@@ -12,7 +12,7 @@ export class AssetService {
 
     updateAsset(gameId: string, assetId: string, playerId: string, rating: number) {
 
-        Logger.debug('Trying to update asset with id', assetId);
+        Logger.debug('Trying to update asset with id ' + assetId);
 
         const game = this.dbConnectorService.getGame(gameId);
         Logger.debug('Corresponding game ' + JSON.stringify(game));
@@ -24,7 +24,7 @@ export class AssetService {
         return asset;
     }
 
-    createAsset(newAsset: NewAsset) {
+    createAsset(newAsset: CreateAsset) {
         const asset = new Asset();
         asset.id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
         asset.name = newAsset.name;

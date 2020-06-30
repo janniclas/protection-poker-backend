@@ -20,7 +20,7 @@ export class Asset {
     proposedRatings: MyMap<Array<number>>
 }
 
-export class NewAsset extends PickType(Asset, ['name', 'gameId'] as const) {}
+export class CreateAsset extends PickType(Asset, ['name', 'gameId'] as const) {}
 
 export class ProposeRating {
     @ApiProperty()

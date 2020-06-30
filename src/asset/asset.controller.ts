@@ -1,5 +1,5 @@
 import { Controller, Body, Post, Param, Patch, Logger } from '@nestjs/common';
-import { Asset, ProposeRating, NewAsset } from './model/Asset';
+import { Asset, ProposeRating, CreateAsset } from './model/Asset';
 import { ApiCreatedResponse } from '@nestjs/swagger';
 import { AssetService } from './asset.service';
 
@@ -13,7 +13,7 @@ export class AssetController {
         description: 'The record has been successfully created.',
         type: Asset,
     })
-    createAsset(@Body() newAsset: NewAsset): Promise<Asset> {
+    createAsset(@Body() newAsset: CreateAsset): Promise<Asset> {
         //TODO: make sure name param is set !
         Logger.log('Received create asset request ' + JSON.stringify(newAsset));
         const asset = this.assetService.createAsset(newAsset);

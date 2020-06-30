@@ -3,28 +3,11 @@ import { Test } from '@nestjs/testing';
 import { AssetModule } from '../src/asset/asset.module';
 import { AssetService } from '../src/asset/asset.service';
 import { INestApplication } from '@nestjs/common';
-import { DbConnectorService, createEmptyGameDummy } from '../src/db-connector/db-connector.service';
+import { DbConnectorService } from '../src/db-connector/db-connector.service';
 import { DbConnectorModule } from '../src/db-connector/db-connector.module';
-import { NewAsset, ProposeRating } from '../src/asset/model/Asset';
 import { SocketModule } from '../src/socket/socket.module';
 import { GameGateway } from '../src/socket/GameGateway';
-
-const dummyGame = createEmptyGameDummy();
-
-const getDummyProposal = () => {
-    const proposal = new ProposeRating();
-    proposal.gameId = dummyGame.id;
-    proposal.rating = 5;
-    proposal.playerId = '42';
-    return proposal;
-}
-
-const getDummyNewAsset = () => {
-    const newAsset = new NewAsset();
-    newAsset.gameId = dummyGame.id;
-    newAsset.name = 'test asset'
-    return newAsset;
-}
+import { getDummyNewAsset, getDummyProposal } from './testUtils';
 
 describe('asset', () => {
     let app: INestApplication;
@@ -61,7 +44,7 @@ describe('asset', () => {
                     }
                 }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} }).then(() => {
                     const rating = getDummyProposal();
-                    request(app.getHttpServer())
+                    return request(app.getHttpServer())
                         .patch('/asset/' + assetId).send(rating).expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { "42": [5] } }).then(resolve);
                 }
                 );
