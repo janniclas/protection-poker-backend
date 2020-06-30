@@ -33,24 +33,25 @@ describe('asset', () => {
     });
 
 
-    it(`/POST and /PATCH Asset`, () => {
+    it(`/POST and /PATCH Asset`, async () => {
         let assetId = 'There was no asset id provided by the server!'; // will be set on server response if response was correct;
-        return new Promise((resolve) => {
-            request(app.getHttpServer())
-                .post('/asset').send(newAsset).expect(function (res) {
-                    if (res.body.id) {
-                        assetId = res.body.id;
-                        res.body.id = '123';
-                    }
-                }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} }).then(() => {
-                    const rating = getDummyProposal();
-                    return request(app.getHttpServer())
-                        .patch('/asset/' + assetId).send(rating).expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { "42": [5] } }).then(resolve);
-                }
-                );
 
-        });
+        await request(app.getHttpServer())
+            .post('/asset').send(newAsset).expect(function (res) {
+                if (res.body.id) {
+                    assetId = res.body.id;
+                    res.body.id = '123';
+                }
+            }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} })
+
+        const rating = getDummyProposal();
+        await request(app.getHttpServer())
+            .patch('/asset/' + assetId).send(rating)
+            .expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { "42": [5] } });
+
+
     });
+
 
 
     afterAll(async () => {

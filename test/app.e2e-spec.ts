@@ -14,8 +14,6 @@ import { Game } from '../src/game/model/Game';
 import { Asset } from 'src/asset/model/Asset';
 
 
-
-
 describe('app', () => {
     let app: INestApplication;
 
@@ -29,10 +27,9 @@ describe('app', () => {
         await app.init();
     });
 
-    it(`create game, add asset, modify asset`, () => {
+    it(`create game, add asset, modify asset`, async () => {
 
         const gameRequest = (id: string, expected: Game) => {
-            console.log('executing game request', id, JSON.stringify(expected));
             expected.id = id; // stupid behavior of expected method...
             return request(app.getHttpServer())
                 .get('/game/' + id).expect(200, expected)
@@ -43,37 +40,33 @@ describe('app', () => {
         let assetId = 'There was no asset id provided by the server!'; // will be set on server response if response was correct
         let createdGame: Game;
         let createdAssset: Asset;
-        return new Promise((resolve) => {
-            request(app.getHttpServer())
-                .post('/game').send(newGame).expect(function (res) {
-                    if (res.body.id) {
-                        createdGame = res.body;
-                        gameId = res.body.id;
-                        res.body.id = '123';
-                    }
-                }).expect(201, { id: '123', name: newGame.name, assets: {} })
-                .then(() => gameRequest(gameId, createdGame)
-                    .then(() => {
 
-                        const newAsset = getDummyNewAsset(gameId);
-                        request(app.getHttpServer())
-                            .post('/asset').send(newAsset).expect(function (res) {
-                                if (res.body.id) {
-                                    createdAssset = res.body;
-                                    assetId = res.body.id;
-                                    res.body.id = '123';
-                                }
-                            }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} })
-                            .then(() => {
-                                createdAssset.id = assetId;
-                                createdGame.assets[createdAssset.id] = createdAssset;
-                                gameRequest(createdGame.id, createdGame)
-                                    .then(resolve);
-                            })
-                    })
-                )
-        });
-    });
+        await request(app.getHttpServer())
+            .post('/game').send(newGame).expect(function (res) {
+                if (res.body.id) {
+                    createdGame = res.body;
+                    gameId = res.body.id;
+                    res.body.id = '123';
+                }
+            }).expect(201, { id: '123', name: newGame.name, assets: {} });
+        await gameRequest(gameId, createdGame);
+
+        const newAsset = getDummyNewAsset(gameId);
+
+        await request(app.getHttpServer())
+            .post('/asset').send(newAsset).expect(function (res) {
+                if (res.body.id) {
+                    createdAssset = res.body;
+                    assetId = res.body.id;
+                    res.body.id = '123';
+                }
+            }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} })
+
+        createdAssset.id = assetId;
+        createdGame.assets[createdAssset.id] = createdAssset;
+        await gameRequest(createdGame.id, createdGame);
+    })
+
 
     afterAll(async () => {
         await app.close();
