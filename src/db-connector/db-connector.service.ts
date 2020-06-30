@@ -59,11 +59,7 @@ export class DbConnectorService {
 const State: { games: MyMap<Game> } = { games: {} };
 
 export const createEmptyGameDummy = () => {
-    const emptyGame = new Game();
-    emptyGame.assets = {};
-    emptyGame.id = '-1';
-    emptyGame.name = 'Empty Game for test Purposes';
-    return emptyGame;
+    return new Game('-1', 'Emtpy Game for test purposes', {});
 };
 
 State.games['-1'] = createEmptyGameDummy();

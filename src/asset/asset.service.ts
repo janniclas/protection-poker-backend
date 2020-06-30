@@ -25,7 +25,7 @@ export class AssetService {
     }
 
     createAsset(newAsset: CreateAsset) {
-        const asset = new Asset();
+        const asset = new Asset(uuidv4(), newAsset.gameId, newAsset.name, {});
         asset.id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
         asset.name = newAsset.name;
         asset.gameId = newAsset.gameId;

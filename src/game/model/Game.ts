@@ -10,7 +10,13 @@ export class GameManager {
 }
 
 export class Game {
-    
+
+    constructor(id: string, name: string, assets: MyMap<Asset>) {
+        this.id = id;
+        this.name = name;
+        this.assets = assets;
+    }
+
     @ApiProperty()
     id: string;
 
@@ -40,9 +46,9 @@ enum GameType {
     ADD_FEATURES
 }
 
-export class GameOverview extends PickType(Game, ['id', 'name'] as const) {}
+export class GameOverview extends PickType(Game, ['id', 'name'] as const) { }
 
-export class CreateGame extends PickType(Game, ['name'] as const) {}
+export class CreateGame extends PickType(Game, ['name'] as const) { }
 
 
-export class Player {}
+export class Player { }
