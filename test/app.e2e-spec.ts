@@ -9,7 +9,7 @@ import { SocketModule } from '../src/socket/socket.module';
 import { GameGateway } from '../src/socket/GameGateway';
 import { GameModule } from '../src/game/game.module';
 import { GameService } from '../src/game/game.service';
-import { getDummyNewAsset, getDummyProposal, getDummyNewGame } from './testUtils';
+import { getDummyNewAsset, getDummyNewGame } from './testUtils';
 import { Game } from '../src/game/model/Game';
 import { Asset } from 'src/asset/model/Asset';
 
@@ -32,6 +32,7 @@ describe('app', () => {
     it(`create game, add asset, modify asset`, () => {
 
         const gameRequest = (id: string, expected: Game) => {
+            console.log('executing game request', id, JSON.stringify(expected));
             expected.id = id; // stupid behavior of expected method...
             return request(app.getHttpServer())
                 .get('/game/' + id).expect(200, expected)
@@ -55,25 +56,23 @@ describe('app', () => {
                     .then(() => {
 
                         const newAsset = getDummyNewAsset(gameId);
-                        return request(app.getHttpServer())
+                        request(app.getHttpServer())
                             .post('/asset').send(newAsset).expect(function (res) {
                                 if (res.body.id) {
                                     createdAssset = res.body;
                                     assetId = res.body.id;
                                     res.body.id = '123';
                                 }
-                            }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} });
+                            }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} })
+                            .then(() => {
+                                createdAssset.id = assetId;
+                                createdGame.assets[createdAssset.id] = createdAssset;
+                                gameRequest(createdGame.id, createdGame)
+                                    .then(resolve);
+                            })
                     })
-                    .then(() => {
-                        createdAssset.id = assetId;
-                        createdGame.assets[createdAssset.id] = createdAssset;
-                        console.log('new try');
-                        return gameRequest(createdGame.id, createdGame);
-                    })
-                    .then(resolve));
-        }
-        );
-
+                )
+        });
     });
 
     afterAll(async () => {
