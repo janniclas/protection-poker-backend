@@ -12,8 +12,7 @@ export class AssetService {
 
     updateAsset(gameId: string, assetId: string, playerId: string, rating: number) {
 
-        Logger.debug('Trying to update asset');
-
+        Logger.debug('Trying to update asset with id', assetId);
 
         const game = this.dbConnectorService.getGame(gameId);
         Logger.debug('Corresponding game ' + JSON.stringify(game));
