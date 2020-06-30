@@ -7,33 +7,52 @@ import { MyMap } from '../models/RatingElement';
 @Injectable()
 export class DbConnectorService {
 
-    saveAsset(asset: Asset) {
+    saveAsset(asset: Asset): Promise<Asset> {
 
         Logger.debug('Trying to save asset ' + JSON.stringify(asset));
-
-        const game = State.games[asset.gameId];
-        if (game) {
-            game.assets[asset.id] = asset;
-            return true;
-        }
-        return false;
-    }
-
-    allGames(): GameOverview[] {
-        return Object.values(State.games).map(game => {
-            const overview = new GameOverview();
-            overview.name = game.name; overview.id = game.id;
-            return overview;
+        return new Promise((resolve, reject) => {
+            const game = State.games[asset.gameId];
+            Logger.debug('Corresponding game ' + JSON.stringify(game));
+            if (game) {
+                game.assets[asset.id] = asset;
+                resolve(asset);
+            }
+            reject('Asset could not be saved successfully');
         });
     }
 
-    saveGame(game: Game): boolean {
-        State.games[game.id] = game;
-        return true;
+    allGames(): Promise<GameOverview[]> {
+        return new Promise((resolve) =>
+            resolve(Object.values(State.games).map(game => {
+                const overview = new GameOverview();
+                overview.name = game.name; overview.id = game.id;
+                return overview;
+            }))
+        );
     }
 
-    getGame(gameId: string): Game {
-        return State.games[gameId];
+    saveGame(game: Game): Promise<Game> {
+
+        return new Promise((resolve, reject) => {
+            if (!State.games[game.id]) {
+                State.games[game.id] = game;
+                resolve(game);
+            } else {
+                reject('Game with the given id already exists.');
+            }
+        });
+    }
+
+    getGame(gameId: string): Promise<Game> {
+        return new Promise((resolve, reject) => {
+            const game = State.games[gameId];
+            if (game) {
+                Logger.debug('Retrieved game ' + JSON.stringify(game));
+                resolve(game);
+            } else {
+                reject('Game with given id was not found.');
+            }
+        });
     }
 }
 

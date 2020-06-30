@@ -9,9 +9,9 @@ import { SocketModule } from '../src/socket/socket.module';
 import { GameGateway } from '../src/socket/GameGateway';
 import { GameModule } from '../src/game/game.module';
 import { GameService } from '../src/game/game.service';
-import { getDummyNewAsset, getDummyNewGame } from './testUtils';
+import { getDummyNewAsset, getDummyNewGame, getDummyProposal } from './testUtils';
 import { Game } from '../src/game/model/Game';
-import { Asset } from 'src/asset/model/Asset';
+import { Asset } from '../src/asset/model/Asset';
 
 
 describe('app', () => {
@@ -44,7 +44,7 @@ describe('app', () => {
         await request(app.getHttpServer())
             .post('/game').send(newGame).expect(function (res) {
                 if (res.body.id) {
-                    createdGame = res.body;
+                    createdGame = { ...res.body };
                     gameId = res.body.id;
                     res.body.id = '123';
                 }
@@ -56,7 +56,7 @@ describe('app', () => {
         await request(app.getHttpServer())
             .post('/asset').send(newAsset).expect(function (res) {
                 if (res.body.id) {
-                    createdAssset = res.body;
+                    createdAssset = { ...res.body };
                     assetId = res.body.id;
                     res.body.id = '123';
                 }
@@ -65,7 +65,16 @@ describe('app', () => {
         createdAssset.id = assetId;
         createdGame.assets[createdAssset.id] = createdAssset;
         await gameRequest(createdGame.id, createdGame);
-    })
+
+        const rating = getDummyProposal(gameId);
+        await request(app.getHttpServer())
+            .patch('/asset/' + assetId).send(rating)
+            .expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { "42": [5] } })
+            .then((response) => { createdGame.assets[createdAssset.id] = response.body });
+
+        await gameRequest(createdGame.id, createdGame);
+
+    });
 
 
     afterAll(async () => {

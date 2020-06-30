@@ -23,9 +23,9 @@ export class AssetController {
 
 
     @Patch(':id')
-    proposeRating(@Param('id') id: string, @Body() proposal: ProposeRating): Promise<Asset> {
+    async proposeRating(@Param('id') id: string, @Body() proposal: ProposeRating): Promise<Asset> {
         Logger.log('Received patch asset request for asset id ' + id + ' ' + JSON.stringify(proposal));
-        const updatedAsset = this.assetService.updateAsset(proposal.gameId, id, proposal.playerId, proposal.rating);
+        const updatedAsset = await this.assetService.updateAsset(proposal.gameId, id, proposal.playerId, proposal.rating);
         // check if all player proposed a rating for the current asset
         return this.assetService.saveAndPublishAsset(updatedAsset);
 

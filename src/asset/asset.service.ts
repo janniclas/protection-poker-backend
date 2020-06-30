@@ -10,11 +10,11 @@ export class AssetService {
     constructor(private dbConnectorService: DbConnectorService,
         private gameGateway: GameGateway) { }
 
-    updateAsset(gameId: string, assetId: string, playerId: string, rating: number) {
+    async updateAsset(gameId: string, assetId: string, playerId: string, rating: number) {
 
         Logger.debug('Trying to update asset with id ' + assetId);
 
-        const game = this.dbConnectorService.getGame(gameId);
+        const game = await this.dbConnectorService.getGame(gameId);
         Logger.debug('Corresponding game ' + JSON.stringify(game));
         const asset = game.assets[assetId];
         if (!asset.proposedRatings[playerId]) {

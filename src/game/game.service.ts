@@ -8,7 +8,7 @@ export class GameService {
 
     constructor(private dbService: DbConnectorService) { }
 
-    allGamesOverview(): GameOverview[] {
+    allGamesOverview(): Promise<GameOverview[]> {
         return this.dbService.allGames();
     }
 
@@ -21,20 +21,10 @@ export class GameService {
     }
 
     saveGame(game: Game): Promise<Game> {
-
-        return new Promise<Game>((resolve, reject) => {
-            const gameSaved = this.dbService.saveGame(game);
-
-            if (gameSaved) {
-                resolve(game);
-            } else {
-                reject('Game was not saved successfully');
-            }
-        }
-        )
+        return this.dbService.saveGame(game);
     }
 
-    getGame(id: string): Game {
+    getGame(id: string): Promise<Game> {
         return this.dbService.getGame(id);
     }
 }

@@ -5,9 +5,9 @@ import { CreateGame } from "../src/game/model/Game";
 
 export const dummyGame = createEmptyGameDummy();
 
-export const getDummyProposal = () => {
+export const getDummyProposal = (gameId?: string)  => {
     const proposal = new ProposeRating();
-    proposal.gameId = dummyGame.id;
+    proposal.gameId = gameId ? gameId : dummyGame.id;
     proposal.rating = 5;
     proposal.playerId = '42';
     return proposal;

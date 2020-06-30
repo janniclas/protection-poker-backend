@@ -9,12 +9,12 @@ export class GameController {
   constructor(private gameService: GameService) { }
 
   @Get()
-  getGameIds(): GameOverview[] {
+  getGameIds(): Promise<GameOverview[]> {
     return this.gameService.allGamesOverview();
   }
 
   @Get(':id')
-  getGame(@Param('id') id: string): Game {
+  getGame(@Param('id') id: string): Promise<Game> {
 
     Logger.log('received get game with id ' + id);
     return this.gameService.getGame(id);
