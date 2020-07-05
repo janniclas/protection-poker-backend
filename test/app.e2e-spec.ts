@@ -13,72 +13,77 @@ import { getDummyNewAsset, getDummyNewGame, getDummyProposal } from './testUtils
 import { Game } from '../src/game/model/Game';
 import { Asset } from '../src/asset/model/Asset';
 
-
 describe('app', () => {
-    let app: INestApplication;
+  let app: INestApplication;
 
-    beforeAll(async () => {
-        const moduleRef = await Test.createTestingModule({
-            imports: [SocketModule, DbConnectorModule, AssetModule, GameModule],
-            providers: [DbConnectorService, AssetService, GameGateway, GameService]
-        }).compile();
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [SocketModule, DbConnectorModule, AssetModule, GameModule],
+      providers: [DbConnectorService, AssetService, GameGateway, GameService],
+    }).compile();
 
-        app = moduleRef.createNestApplication();
-        await app.init();
-    });
+    app = moduleRef.createNestApplication();
+    await app.init();
+  });
 
-    it(`create game, add asset, modify asset`, async () => {
+  it(`create game, add asset, modify asset`, async () => {
+    const gameRequest = (id: string, expected: Game) => {
+      expected.id = id; // stupid behavior of expected method...
+      return request(app.getHttpServer())
+        .get('/game/' + id)
+        .expect(200, expected);
+    };
 
-        const gameRequest = (id: string, expected: Game) => {
-            expected.id = id; // stupid behavior of expected method...
-            return request(app.getHttpServer())
-                .get('/game/' + id).expect(200, expected)
-        };
+    const newGame = getDummyNewGame();
+    let gameId = 'There was no asset id provided by the server!'; // will be set on server response if response was correct
+    let assetId = 'There was no asset id provided by the server!'; // will be set on server response if response was correct
+    let createdGame: Game;
+    let createdAssset: Asset;
 
-        const newGame = getDummyNewGame();
-        let gameId = 'There was no asset id provided by the server!'; // will be set on server response if response was correct
-        let assetId = 'There was no asset id provided by the server!'; // will be set on server response if response was correct
-        let createdGame: Game;
-        let createdAssset: Asset;
+    await request(app.getHttpServer())
+      .post('/game')
+      .send(newGame)
+      .expect(function(res) {
+        if (res.body.id) {
+          createdGame = { ...res.body };
+          gameId = res.body.id;
+          res.body.id = '123';
+        }
+      })
+      .expect(201, { id: '123', name: newGame.name, assets: {} });
+    await gameRequest(gameId, createdGame);
 
-        await request(app.getHttpServer())
-            .post('/game').send(newGame).expect(function (res) {
-                if (res.body.id) {
-                    createdGame = { ...res.body };
-                    gameId = res.body.id;
-                    res.body.id = '123';
-                }
-            }).expect(201, { id: '123', name: newGame.name, assets: {} });
-        await gameRequest(gameId, createdGame);
+    const newAsset = getDummyNewAsset(gameId);
 
-        const newAsset = getDummyNewAsset(gameId);
+    await request(app.getHttpServer())
+      .post('/asset')
+      .send(newAsset)
+      .expect(function(res) {
+        if (res.body.id) {
+          createdAssset = { ...res.body };
+          assetId = res.body.id;
+          res.body.id = '123';
+        }
+      })
+      .expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} });
 
-        await request(app.getHttpServer())
-            .post('/asset').send(newAsset).expect(function (res) {
-                if (res.body.id) {
-                    createdAssset = { ...res.body };
-                    assetId = res.body.id;
-                    res.body.id = '123';
-                }
-            }).expect(201, { id: '123', name: newAsset.name, gameId: newAsset.gameId, proposedRatings: {} })
+    createdAssset.id = assetId;
+    createdGame.assets[createdAssset.id] = createdAssset;
+    await gameRequest(createdGame.id, createdGame);
 
-        createdAssset.id = assetId;
-        createdGame.assets[createdAssset.id] = createdAssset;
-        await gameRequest(createdGame.id, createdGame);
+    const rating = getDummyProposal(gameId);
+    await request(app.getHttpServer())
+      .patch('/asset/' + assetId)
+      .send(rating)
+      .expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { '42': [5] } })
+      .then(response => {
+        createdGame.assets[createdAssset.id] = response.body;
+      });
 
-        const rating = getDummyProposal(gameId);
-        await request(app.getHttpServer())
-            .patch('/asset/' + assetId).send(rating)
-            .expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { "42": [5] } })
-            .then((response) => { createdGame.assets[createdAssset.id] = response.body });
+    await gameRequest(createdGame.id, createdGame);
+  });
 
-        await gameRequest(createdGame.id, createdGame);
-
-    });
-
-
-    afterAll(async () => {
-        await app.close();
-    });
+  afterAll(async () => {
+    await app.close();
+  });
 });
-

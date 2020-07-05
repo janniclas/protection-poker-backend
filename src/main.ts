@@ -12,7 +12,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  fs.writeFileSync("./openApi.json", JSON.stringify(document));
+  fs.writeFileSync('./openApi.json', JSON.stringify(document));
 
   SwaggerModule.setup('api', app, document);
 

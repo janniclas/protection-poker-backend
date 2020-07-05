@@ -6,6 +6,6 @@ import { DbConnectorModule } from '../db-connector/db-connector.module';
 @Module({
   controllers: [GameController],
   providers: [GameService],
-  imports: [DbConnectorModule]
+  imports: [DbConnectorModule],
 })
 export class GameModule {}

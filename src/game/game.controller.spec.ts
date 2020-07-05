@@ -4,13 +4,16 @@ import { GameService } from './game.service';
 
 describe('Game Controller', () => {
   let controller: GameController;
-  let gameService = {};
+  const gameService = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [GameController],
-      providers: [GameService]
-    }).overrideProvider(GameService).useValue(gameService).compile();
+      providers: [GameService],
+    })
+      .overrideProvider(GameService)
+      .useValue(gameService)
+      .compile();
 
     controller = module.get<GameController>(GameController);
   });

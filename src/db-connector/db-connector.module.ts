@@ -3,6 +3,6 @@ import { DbConnectorService } from './db-connector.service';
 
 @Module({
   providers: [DbConnectorService],
-  exports: [DbConnectorService]
+  exports: [DbConnectorService],
 })
 export class DbConnectorModule {}

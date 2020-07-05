@@ -9,6 +9,6 @@ import { SocketModule } from './socket/socket.module';
 @Module({
   imports: [GameModule, DbConnectorModule, AssetModule, SocketModule],
   controllers: [AppController],
-  providers: [ AppService]
+  providers: [AppService],
 })
 export class AppModule {}

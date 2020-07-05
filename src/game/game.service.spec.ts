@@ -8,7 +8,7 @@ describe('GameService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [GameService],
-      imports: [DbConnectorModule]
+      imports: [DbConnectorModule],
     }).compile();
 
     service = module.get<GameService>(GameService);

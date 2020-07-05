@@ -5,8 +5,7 @@ import { ApiCreatedResponse } from '@nestjs/swagger';
 
 @Controller('game')
 export class GameController {
-
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService) {}
 
   @Get()
   getGameIds(): Promise<GameOverview[]> {
@@ -15,7 +14,6 @@ export class GameController {
 
   @Get(':id')
   getGame(@Param('id') id: string): Promise<Game> {
-
     Logger.log('received get game with id ' + id);
     return this.gameService.getGame(id);
   }
@@ -26,14 +24,12 @@ export class GameController {
     type: Game,
   })
   createGame(@Body() createGame: CreateGame): Promise<Game> {
-
     //TODO: make sure name param is set !
-    // therefore, figure out how to combine 
-    // validator pipes with swagger 
+    // therefore, figure out how to combine
+    // validator pipes with swagger
 
     Logger.log('received create game ' + JSON.stringify(createGame));
     const game = this.gameService.createGame(createGame);
     return this.gameService.saveGame(game);
   }
-
 }

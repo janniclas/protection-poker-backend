@@ -9,7 +9,7 @@ describe('AssetService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [AssetService],
-      imports: [SocketModule, DbConnectorModule]
+      imports: [SocketModule, DbConnectorModule],
     }).compile();
 
     service = module.get<AssetService>(AssetService);

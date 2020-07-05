@@ -7,6 +7,6 @@ import { SocketModule } from '../socket/socket.module';
 @Module({
   controllers: [AssetController],
   providers: [AssetService],
-  imports: [DbConnectorModule, SocketModule]
+  imports: [DbConnectorModule, SocketModule],
 })
 export class AssetModule {}

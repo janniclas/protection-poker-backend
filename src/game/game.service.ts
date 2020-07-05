@@ -5,22 +5,21 @@ import { DbConnectorService } from '../db-connector/db-connector.service';
 
 @Injectable()
 export class GameService {
+  constructor(private dbService: DbConnectorService) {}
 
-    constructor(private dbService: DbConnectorService) { }
+  allGamesOverview(): Promise<GameOverview[]> {
+    return this.dbService.allGames();
+  }
 
-    allGamesOverview(): Promise<GameOverview[]> {
-        return this.dbService.allGames();
-    }
+  createGame(createGame: CreateGame): Game {
+    return new Game(uuidv4(), createGame.name, {});
+  }
 
-    createGame(createGame: CreateGame) {
-        return new Game(uuidv4(), createGame.name, {});
-    }
+  saveGame(game: Game): Promise<Game> {
+    return this.dbService.saveGame(game);
+  }
 
-    saveGame(game: Game): Promise<Game> {
-        return this.dbService.saveGame(game);
-    }
-
-    getGame(id: string): Promise<Game> {
-        return this.dbService.getGame(id);
-    }
+  getGame(id: string): Promise<Game> {
+    return this.dbService.getGame(id);
+  }
 }

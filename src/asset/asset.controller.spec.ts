@@ -4,13 +4,23 @@ import { AssetService } from './asset.service';
 
 describe('Asset Controller', () => {
   let controller: AssetController;
-  let assetService = { createAsset: () => { }, updateAsset: () => { } };
+  const assetService = {
+    createAsset: () => {
+      console.log('this is a stub method');
+    },
+    updateAsset: () => {
+      console.log('this is a stub method');
+    },
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AssetController],
-      providers: [AssetService]
-    }).overrideProvider(AssetService).useValue(assetService).compile();
+      providers: [AssetService],
+    })
+      .overrideProvider(AssetService)
+      .useValue(assetService)
+      .compile();
 
     controller = module.get<AssetController>(AssetController);
   });
