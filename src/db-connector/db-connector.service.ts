@@ -19,9 +19,9 @@ export class DbConnectorService {
   }
 
   allGames(): Promise<GameOverview[]> {
-    return new Promise(resolve =>
+    return new Promise((resolve) =>
       resolve(
-        Object.values(State.games).map(game => {
+        Object.values(State.games).map((game) => {
           const overview = new GameOverview();
           overview.name = game.name;
           overview.id = game.id;

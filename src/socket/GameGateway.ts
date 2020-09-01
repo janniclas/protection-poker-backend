@@ -35,7 +35,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection {
   }
 
   public publishAsset(asset: Asset): void {
-    this.getClientsForGame(asset.gameId).forEach(socket => {
+    this.getClientsForGame(asset.gameId).forEach((socket) => {
       socket.emit('addAsset', asset);
     });
   }

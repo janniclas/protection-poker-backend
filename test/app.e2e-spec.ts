@@ -43,7 +43,7 @@ describe('app', () => {
     await request(app.getHttpServer())
       .post('/game')
       .send(newGame)
-      .expect(function(res) {
+      .expect(function (res) {
         if (res.body.id) {
           createdGame = { ...res.body };
           gameId = res.body.id;
@@ -58,7 +58,7 @@ describe('app', () => {
     await request(app.getHttpServer())
       .post('/asset')
       .send(newAsset)
-      .expect(function(res) {
+      .expect(function (res) {
         if (res.body.id) {
           createdAssset = { ...res.body };
           assetId = res.body.id;
@@ -76,7 +76,7 @@ describe('app', () => {
       .patch('/asset/' + assetId)
       .send(rating)
       .expect(200, { id: assetId, name: newAsset.name, gameId: newAsset.gameId, proposedRatings: { '42': [5] } })
-      .then(response => {
+      .then((response) => {
         createdGame.assets[createdAssset.id] = response.body;
       });
 

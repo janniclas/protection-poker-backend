@@ -27,7 +27,7 @@ describe('asset', () => {
     return request(app.getHttpServer())
       .post('/asset')
       .send(newAsset)
-      .expect(function(res) {
+      .expect(function (res) {
         if (res.body.id) {
           res.body.id = '123';
         }
@@ -41,7 +41,7 @@ describe('asset', () => {
     await request(app.getHttpServer())
       .post('/asset')
       .send(newAsset)
-      .expect(function(res) {
+      .expect(function (res) {
         if (res.body.id) {
           assetId = res.body.id;
           res.body.id = '123';
